@@ -4,14 +4,19 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_ap2/Models/person.dart';
 
+
 class DatabaseHelper {
-  static DatabaseHelper _databaseHelper; //SINGLETON//PADRAO DE PROJETO
-  static Database _database; // singleton database
+  static DatabaseHelper? _databaseHelper; //SINGLETON//PADRAO DE PROJETO
+  static Database? _database; // singleton database
   String personTable = 'person_table';
   String colId = 'id';
   String colName = 'name';
-  String colAge = 'age';
+  String colAgeOptions = '_ageOptions';
+  String colBloodPressureOptions = '_BloodPressureOptions';
 //  String colDesc = 'desc';
+
+
+
 
   DatabaseHelper._createInstancia(); //Construtor nomeado.
 
@@ -19,12 +24,12 @@ class DatabaseHelper {
     if (_databaseHelper == null) {
       _databaseHelper = DatabaseHelper._createInstancia();
     }
-    return _databaseHelper;
+    return _databaseHelper!;
   }
 
   void _createDb(Database db, int newVersion) async {
     await db.execute(
-        'Create table $personTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colName TEXT, $colAge Text)');
+        'Create table $personTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colName TEXT, $colAgeOptions INTEGER, $colBloodPressureOptions INTEGER)');
   }
 
     Future<Database> initializeDatabase() async{
@@ -38,15 +43,15 @@ class DatabaseHelper {
     if(_database == null){
       _database = await initializeDatabase();
     }
-    return _database;
+    return _database!;
     }
 
 //   //add
-//     Future<int> insertPerson(Person person) async{
-//       Database db = await this.database;
-//       var result=db.insert(personTable, person.toMap());
-//       return result;
-//     }
+    Future<int> insertPerson(Person person) async{
+    Database db = await this.database;
+    var result=db.insert(personTable, person.toMap());
+    return result;
+     }
 
 // //update
 //     Future<int> updatePerson(Person person) async {

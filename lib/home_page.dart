@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ap2/Models/person.dart';
+import 'package:flutter_ap2/database/app_database.dart';
 import 'package:flutter_ap2/widgets/activity_radio.dart';
 import 'package:flutter_ap2/widgets/age_radio.dart';
 import 'package:flutter_ap2/widgets/blood_pressure_radio.dart';
@@ -9,11 +11,23 @@ import 'package:flutter_ap2/widgets/gender_radio.dart';
 import 'package:flutter_ap2/widgets/smoke_radio.dart';
 import 'package:flutter_ap2/widgets/wheight_radio.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({ Key? key }) : super(key: key);
 
   @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  DatabaseHelper helper= DatabaseHelper();
+
+  @override
   Widget build(BuildContext context) {
+     AgeOptions? _age;
+     BloodPressureOptions? _bloodPressure;
+     String _name;
+     TextEditingController titleController= TextEditingController();
+
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (OverscrollIndicatorNotification? overscroll) {
         overscroll!.disallowGlow();
@@ -72,18 +86,20 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 45),
+
                 TextField(
+                  controller: titleController,
                   cursorColor: Colors.greenAccent,
                   maxLength: 20,
                   decoration: InputDecoration(
                     counterStyle: TextStyle(color: Colors.greenAccent),
                     border: OutlineInputBorder(),
                     hintText: 'Insira seu nome',
-                    hintStyle: 
+                    hintStyle:
                       TextStyle(
                         fontSize: 14,
                         color: Colors.white,
-                      ), 
+                      ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.greenAccent),
                     ),
@@ -92,12 +108,13 @@ class HomePage extends StatelessWidget {
                     ),
                     focusedErrorBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.red),
-                    ),    
+                    ),
                   ),
                   style: TextStyle(
                     color: Colors.white,
                   ),
                 ),
+
                 SizedBox(height: 20),
                 Row(
                   children: [
@@ -110,7 +127,11 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                AgeRadioStatefulWidget(),
+                AgeRadioStatefulWidget(
+                   onOptionSelected: (value){
+                     _age=value!;
+                  },
+                ),
                 SizedBox(height: 25),
                 Row(
                   children: [
@@ -175,7 +196,11 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                BloodPressureRadioStatefulWidget(),
+                BloodPressureRadioStatefulWidget(
+                   onOptionSelected: (value){
+                     _bloodPressure=value!;
+                   },
+                ),
                 SizedBox(height: 25),
                 Row(
                   children: [
@@ -206,7 +231,7 @@ class HomePage extends StatelessWidget {
                 Container(          //CONTAINER DO RESULTADO FINAL COM A INFO DA SOMA
 
 
-                
+
                   //color: Colors.pink,
                   height: 150,
                   padding: EdgeInsets.only(
@@ -310,7 +335,7 @@ class HomePage extends StatelessWidget {
                           Icon(
                             Icons.favorite,
                             color: Colors.greenAccent,
-                            size: 30,
+                            size: 20,
                           ),
                         ],
                       ),
@@ -321,6 +346,19 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: (){
+              setState(() {
+                Person p1= Person(titleController.text,_age!,_bloodPressure!);
+                debugPrint(p1.toString());
+                add(p1);
+                debugPrint("SALVAR");
+              });
+
+
+            },tooltip: "Salvar Avaliação",
+            child: Icon (Icons.save),
+          ),
         // bottomNavigationBar: Container(
         //   color: Colors.yellow,
         //   height: 60,
@@ -341,6 +379,13 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-  
 
+  void add(Person p1) async{
+    int result= await helper.insertPerson(p1);
+    AlertDialog alertDialog = AlertDialog(
+      title: Text("SALVO?"),
+      content: Text(result.toString()),
+    );
+    showDialog(context: context, builder: (_) => alertDialog);
+  }
 }

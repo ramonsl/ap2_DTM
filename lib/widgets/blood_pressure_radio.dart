@@ -4,7 +4,12 @@ enum BloodPressureOptions { sistolica_100_a_119, sistolica_120_139, sistolica_14
                             sistolica_180_199, sistolica_acima_200 }
 
 class BloodPressureRadioStatefulWidget extends StatefulWidget {
-  const BloodPressureRadioStatefulWidget({Key? key}) : super(key: key);
+   final void Function(BloodPressureOptions? option) onOptionSelected;
+
+  const BloodPressureRadioStatefulWidget({
+    Key? key,
+    required this.onOptionSelected,
+  }) : super(key: key);
 
   @override
   State<BloodPressureRadioStatefulWidget> createState() => _BloodPressureRadioStatefulWidget();
@@ -32,6 +37,7 @@ class _BloodPressureRadioStatefulWidget extends State<BloodPressureRadioStateful
             onChanged: (BloodPressureOptions? value) {
               setState(() {
                 _bloodPressure = value;
+                widget.onOptionSelected(value);
               });
             },
             activeColor: Color(0xFF2FFFA0),
@@ -51,6 +57,8 @@ class _BloodPressureRadioStatefulWidget extends State<BloodPressureRadioStateful
             onChanged: (BloodPressureOptions? value) {
               setState(() {
                 _bloodPressure = value;
+                widget.onOptionSelected(value);
+
               });
             },
             activeColor: Color(0xFF2FFFA0),
@@ -70,6 +78,8 @@ class _BloodPressureRadioStatefulWidget extends State<BloodPressureRadioStateful
             onChanged: (BloodPressureOptions? value) {
               setState(() {
                 _bloodPressure = value;
+                widget.onOptionSelected(value);
+
               });
             },
             activeColor: Color(0xFF2FFFA0),
@@ -89,6 +99,8 @@ class _BloodPressureRadioStatefulWidget extends State<BloodPressureRadioStateful
             onChanged: (BloodPressureOptions? value) {
               setState(() {
                 _bloodPressure = value;
+                widget.onOptionSelected(value);
+
               });
             },
             activeColor: Color(0xFF2FFFA0),
@@ -108,6 +120,8 @@ class _BloodPressureRadioStatefulWidget extends State<BloodPressureRadioStateful
             onChanged: (BloodPressureOptions? value) {
               setState(() {
                 _bloodPressure = value;
+                widget.onOptionSelected(value);
+
               });
             },
             activeColor: Color(0xFF2FFFA0),
@@ -127,6 +141,8 @@ class _BloodPressureRadioStatefulWidget extends State<BloodPressureRadioStateful
             onChanged: (BloodPressureOptions? value) {
               setState(() {
                 _bloodPressure = value;
+                widget.onOptionSelected(value);
+
               });
             },
             activeColor: Color(0xFF2FFFA0),
