@@ -23,8 +23,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-     AgeOptions? _age;
-     BloodPressureOptions? _bloodPressure;
+     AgeOptions? _age= AgeOptions.dez_a_20_anos;
+     BloodPressureOptions? _bloodPressure = BloodPressureOptions.sistolica_100_a_119;
      String _name;
      TextEditingController titleController= TextEditingController();
 
@@ -349,8 +349,10 @@ class _HomePageState extends State<HomePage> {
           floatingActionButton: FloatingActionButton(
             onPressed: (){
               setState(() {
-                Person p1= Person(titleController.text,_age!,_bloodPressure!);
-                debugPrint(p1.toString());
+
+
+              //  debugPrint(_age!.toString());
+                Person p1= Person(titleController.text,_age!);
                 add(p1);
                 debugPrint("SALVAR");
               });
@@ -382,10 +384,11 @@ class _HomePageState extends State<HomePage> {
 
   void add(Person p1) async{
     int result= await helper.insertPerson(p1);
-    AlertDialog alertDialog = AlertDialog(
+    debugPrint(result.toString());
+   /* AlertDialog alertDialog = AlertDialog(
       title: Text("SALVO?"),
       content: Text(result.toString()),
     );
-    showDialog(context: context, builder: (_) => alertDialog);
+    showDialog(context: context, builder: (_) => alertDialog);*/
   }
 }

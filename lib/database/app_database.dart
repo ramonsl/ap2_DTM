@@ -11,12 +11,9 @@ class DatabaseHelper {
   String personTable = 'person_table';
   String colId = 'id';
   String colName = 'name';
-  String colAgeOptions = '_ageOptions';
-  String colBloodPressureOptions = '_BloodPressureOptions';
+  String colAgeOptions = 'age';
+ /// String colBloodPressureOptions = '_BloodPressureOptions';
 //  String colDesc = 'desc';
-
-
-
 
   DatabaseHelper._createInstancia(); //Construtor nomeado.
 
@@ -29,13 +26,19 @@ class DatabaseHelper {
 
   void _createDb(Database db, int newVersion) async {
     await db.execute(
-        'Create table $personTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colName TEXT, $colAgeOptions INTEGER, $colBloodPressureOptions INTEGER)');
+        'Create table $personTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colName TEXT, $colAgeOptions INTEGER)');
+  }
+
+  void _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    await db.execute("DROP TABLE $personTable");
+    await db.execute('Create table $personTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colName TEXT, $colAgeOptions INTEGER)');
+
   }
 
     Future<Database> initializeDatabase() async{
     Directory diretorio = await getApplicationDocumentsDirectory();
-    String path=diretorio.path+ "person.db";
-    var personDatabase= await openDatabase(path, version: 1,onCreate:_createDb );
+    String path=diretorio.path+ "person2.db";
+    var personDatabase= await openDatabase(path, version: 9,onCreate:_createDb, onUpgrade: _onUpgrade );
     return personDatabase;
   }
 
